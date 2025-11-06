@@ -1,25 +1,48 @@
 {% extends 'board/base.html' %}
 
 {% block content %}
-<div style="max-width:480px; margin:40px auto; font-family:Inter, sans-serif;">
-  <h2>Login</h2>
-  {% if form.errors %}
-  <div style="color:red">Please correct the error below.</div>
-  {% endif %}
-  <form method="post">
-    {% csrf_token %}
-    {% if next %}
-    <input type="hidden" name="next" value="{{ next }}" />
+<div style="font-family: 'Inter', sans-serif; max-width:460px; margin:60px auto;">
+  <div
+    style="background:linear-gradient(180deg,#FFFFFF 0%, #F7FBFF 100%); padding:36px; border-radius:16px; box-shadow:0 12px 30px rgba(13, 60, 115, 0.08);">
+    <div style="text-align:center; margin-bottom:18px;">
+      <h2 style="margin:0; font-size:1.6rem; color:#1E3A8A; font-weight:800;">Log in to ThoughtBoard</h2>
+      <p style="margin:8px 0 0; color:#6B7280;">Welcome back — enter your credentials to continue.</p>
+    </div>
+
+    {% if form.errors %}
+    <div
+      style="background:#FDEDEC; border:1px solid #F5C6CB; color:#A61B1B; padding:10px 12px; border-radius:10px; margin-bottom:12px;">
+      Please correct the errors below.
+    </div>
     {% endif %}
-    <p>
-      <label for="id_username">Username:</label><br>
-      {{ form.username }}
-    </p>
-    <p>
-      <label for="id_password">Password:</label><br>
-      {{ form.password }}
-    </p>
-    <button type="submit" style="padding:8px 16px;">Log in</button>
-  </form>
+
+    <form method="post">
+      {% csrf_token %}
+      {% if next %}
+      <input type="hidden" name="next" value="{{ next }}" />
+      {% endif %}
+
+      <div style="display:flex; flex-direction:column; gap:12px;">
+        <label style="font-weight:600; color:#1E3A8A;">Username</label>
+        {{ form.username }}
+
+        <label style="font-weight:600; color:#1E3A8A;">Password</label>
+        {{ form.password }}
+      </div>
+
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-top:18px;">
+        <a href="{% url 'password_reset' %}" style="color:#3498DB; text-decoration:none; font-size:0.95rem;">Forgot
+          password?</a>
+        <button type="submit"
+          style="padding:12px 22px; font-weight:700; background:linear-gradient(90deg,#85C1E9,#5DADE2); color:#fff; border:none; border-radius:10px; cursor:pointer;">Log
+          in</button>
+      </div>
+    </form>
+
+    <div style="text-align:center; margin-top:16px; color:#6B7280; font-size:0.95rem;">
+      Don't have an account? <a href="{% url 'signup' %}"
+        style="color:#1E3A8A; font-weight:700; text-decoration:none;">Sign up</a>
+    </div>
+  </div>
 </div>
 {% endblock %}

@@ -1,15 +1,62 @@
 {% extends 'board/base.html' %}
 
 {% block content %}
-<div style="max-width:480px; margin:40px auto; font-family:Inter, sans-serif;">
-  <h2>Sign up</h2>
-  {% if form.errors %}
-  <div style="color:red">Please correct the errors below.</div>
-  {% endif %}
-  <form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" style="padding:8px 16px;">Create account</button>
-  </form>
+<div style="font-family: 'Inter', sans-serif; max-width:520px; margin:60px auto;">
+  <div
+    style="background:linear-gradient(180deg,#FFFFFF 0%, #F7FBFF 100%); padding:36px; border-radius:16px; box-shadow:0 12px 30px rgba(13, 60, 115, 0.07);">
+    <div style="text-align:center; margin-bottom:14px;">
+      <h2 style="margin:0; font-size:1.6rem; color:#1E3A8A; font-weight:800;">Create your account</h2>
+      <p style="margin:8px 0 0; color:#6B7280;">Join ThoughtBoard — start sharing and exploring posts.</p>
+    </div>
+
+    {% if form.errors %}
+    <div
+      style="background:#FEF3C7; border:1px solid #FDE68A; color:#92400E; padding:10px 12px; border-radius:10px; margin-bottom:12px;">
+      Please correct the errors below.
+    </div>
+    {% endif %}
+
+    <style>
+      /* scoped simple styles to make form fields match home.html look */
+      .signup-card input,
+      .signup-card select,
+      .signup-card textarea {
+        width: 100%;
+        padding: 12px 14px;
+        border-radius: 10px;
+        border: none;
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.04);
+        font-size: 1rem;
+        margin-top: 6px;
+        box-sizing: border-box;
+      }
+
+      .signup-card label {
+        font-weight: 600;
+        color: #1E3A8A;
+      }
+
+      .signup-card .submit-btn {
+        padding: 12px 22px;
+        font-weight: 700;
+        background: linear-gradient(90deg, #85C1E9, #5DADE2);
+        color: #fff;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+      }
+    </style>
+
+    <form method="post" class="signup-card" style="display:flex; flex-direction:column; gap:12px;">
+      {% csrf_token %}
+      {{ form.as_p }}
+
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-top:6px;">
+        <a href="{% url 'login' %}" style="color:#3498DB; text-decoration:none; font-size:0.95rem;">Already have an
+          account?</a>
+        <button type="submit" class="submit-btn">Create account</button>
+      </div>
+    </form>
+  </div>
 </div>
 {% endblock %}

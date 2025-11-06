@@ -87,5 +87,5 @@ def home(request):
     if query:
         posts = Post.objects.filter(title__icontains=query)
     else:
-        posts = Post.objects.all().order_by('-created_at')[:5]  # 최근 5개 포스트
+        posts = Post.objects.all().order_by('-created_at')
     return render(request, 'board/home.html', {'posts': posts, 'query': query})
