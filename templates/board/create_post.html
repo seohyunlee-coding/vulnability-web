@@ -54,7 +54,7 @@
     </style>
 
     <form method="post" class="post-form" style="display:flex; flex-direction:column; gap:12px;">
-      {% csrf_token %}
+      <!-- CSRF 취약점: csrf_token 제거 (교육용) -->
       {{ form.as_p }}
 
       <div style="text-align:right; margin-top:6px;">

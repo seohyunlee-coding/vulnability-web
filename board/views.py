@@ -9,12 +9,14 @@ from django.template import Template, Context
 from .models import Post
 from .forms import PostForm
 
-def index(request):
-    posts = Post.objects.order_by('-created_at')[:20]
-    return render(request, 'board/index.html', {'posts': posts})
 
 @login_required
+@csrf_exempt  # CSRF 보호 비활성화 (교육용 취약점)
 def create_post(request):
+    """
+    CSRF 취약점: @csrf_exempt 데코레이터로 CSRF 보호 제거
+    공격자가 외부 사이트에서 이 엔드포인트로 POST 요청 가능
+    """
     if request.method == 'POST':
         form = PostForm(request.POST)
         if form.is_valid():
@@ -50,42 +52,41 @@ def signup(request):
         form = UserCreationForm()
     return render(request, 'registration/signup.html', {'form': form})
 
-def search_raw(request):
-    """Deliberately unsafe raw SQL search to demonstrate SQL injection."""
-    q = request.GET.get('q', '')
-    posts = []
-    if q:
-        # WARNING: insecure raw SQL concatenation (SQLi demonstration)
-        with connection.cursor() as cur:
-            cur.execute("SELECT id, title, body FROM board_post WHERE title LIKE '%%" + q + "%%'")
-            rows = cur.fetchall()
-        for r in rows:
-            posts.append({'id': r[0], 'title': r[1], 'body': r[2]})
-    return render(request, 'board/search.html', {'posts': posts, 'q': q})
-
-@csrf_exempt
-def delete_post(request, post_id):
-    """CSRF exempt delete — intentional vulnerability."""
-    post = get_object_or_404(Post, pk=post_id)
-    # Only allow the post author to delete their post
-    if request.user.is_authenticated and request.user == post.author:
-        post.delete()
-    return redirect('home')
-
-def ssti_demo(request):
-    """Demonstrate a server-side template injection-like behavior by rendering user input as a template."""
-    expr = request.GET.get('tpl', '')
-    rendered = ''
-    if expr:
-        # WARNING: intentionally rendering user input as template
-        t = Template(expr)
-        rendered = t.render(Context({'user': request.user, 'posts': Post.objects.all()}))
-    return render(request, 'board/ssti.html', {'rendered': rendered, 'expr': expr})
-
 def home(request):
+    """
+    SQL Injection 취약점: 사용자 입력을 직접 SQL 쿼리에 삽입
+    테스트 예시: ?query=' OR '1'='1
+    """
     query = request.GET.get('query', '')
     if query:
-        posts = Post.objects.filter(title__icontains=query)
+        # 취약한 Raw SQL 사용 (교육용)
+        with connection.cursor() as cursor:
+            # SQL Injection 취약점: 사용자 입력을 직접 쿼리에 삽입
+            sql = f"SELECT * FROM board_post WHERE title LIKE '%{query}%' ORDER BY created_at DESC"
+            cursor.execute(sql)
+            columns = [col[0] for col in cursor.description]
+            posts = []
+            for row in cursor.fetchall():
+                # UNION 공격 시 다른 테이블 데이터가 섞여 들어올 수 있음
+                # 컬럼 개수가 맞으면 Post 객체로 변환
+                try:
+                    posts.append(Post(
+                        id=row[0],
+                        author_id=row[1],
+                        title=row[2],
+                        body=row[3],  # UNION 공격 시 여기에 비밀번호 등이 들어올 수 있음
+                        created_at=row[4]
+                    ))
+                except:
+                    # 에러 발생 시 raw 데이터를 딕셔너리로 전달
+                    pass
     else:
         posts = Post.objects.all().order_by('-created_at')
     return render(request, 'board/home.html', {'posts': posts, 'query': query})
+
+def csrf_attack_demo(request):
+    """
+    CSRF 공격 데모 페이지
+    이 페이지에서 버튼을 클릭하면 사용자 모르게 게시물이 작성됨
+    """
+    return render(request, 'board/csrf_attack_demo.html')
