@@ -1,4 +1,4 @@
-# 🔒 Django Vulnerability Web - 보안 취약점 학습 프로젝트
+# 🔒 Vulnerability Web - 보안 취약점 학습 프로젝트
 
 이 저장소는 웹 보안 취약점을 학습하기 위한 교육용 Django 웹 애플리케이션입니다. XSS, SQL Injection, CSRF 등 주요 보안 취약점이 의도적으로 구현되어 있어 실습과 연구를 통해 안전한 코딩 방법을 배울 수 있습니다.
 
