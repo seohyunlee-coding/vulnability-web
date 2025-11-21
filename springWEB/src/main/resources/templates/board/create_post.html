@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Create Post</title>
+  <style>
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      margin: 20px
+    }
+
+    header nav a {
+      margin-right: 10px
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <nav>
+      <a th:href="@{/}">Home</a>
+      <a th:href="@{/posts/create}">Write</a>
+      <a th:href="@{/my-posts}">My Posts</a>
+      <span th:if="${#authentication?.name}"> | Logged in as <b th:text="${#authentication.name}"></b></span>
+      <span th:if="${#authentication == null}">
+        <a th:href="@{/login}">Login</a>
+      </span>
+      <form th:if="${#authentication != null}" th:action="@{/logout}" method="post" style="display:inline">
+        <button type="submit">Logout</button>
+      </form>
+    </nav>
+  </header>
+
+  <main>
+    <h1>Create Post</h1>
+
+    <form th:action="@{/posts/create}" th:object="${post}" method="post">
+      <div>
+        <label>Title</label>
+        <input type="text" th:field="*{title}" />
+      </div>
+      <div>
+        <label>Content</label>
+        <textarea th:field="*{content}" rows="8" cols="60"></textarea>
+      </div>
+      <div>
+        <button type="submit">Submit</button>
+      </div>
+    </form>
+  </main>
+
+</body>
+
+</html>

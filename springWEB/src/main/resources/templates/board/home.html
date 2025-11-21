@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Home</title>
+  <style>
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      margin: 20px
+    }
+
+    header nav a {
+      margin-right: 10px
+    }
+
+    .post {
+      border: 1px solid #ddd;
+      padding: 12px;
+      margin-bottom: 12px
+    }
+  </style>
+  <link rel="stylesheet" th:href="@{/css/main.css}" />
+</head>
+
+<body>
+  <header>
+    <nav>
+      <a th:href="@{/}">Home</a>
+      <a th:href="@{/posts/create}">Write</a>
+      <a th:href="@{/my-posts}">My Posts</a>
+      <span th:if="${#authentication?.name}"> | Logged in as <b th:text="${#authentication.name}"></b></span>
+      <span th:if="${#authentication == null}">
+        <a th:href="@{/login}">Login</a>
+      </span>
+      <form th:if="${#authentication != null}" th:action="@{/logout}" method="post" style="display:inline">
+        <button type="submit">Logout</button>
+      </form>
+    </nav>
+  </header>
+
+  <main>
+    <h1>Home</h1>
+
+    <form method="get" th:action="@{/}">
+      <input type="text" name="q" placeholder="Search" th:value="${q}" />
+      <button type="submit">Search</button>
+    </form>
+
+    <div th:if="${posts.size()} == 0">No posts yet.</div>
+    <div th:each="post : ${posts}" class="post">
+      <h3 th:text="${post.title}">Title</h3>
+      <div><small>by <span th:text="${post.author}">author</span> - <span
+            th:text="${post.createdAt}">date</span></small></div>
+      <p th:text="${post.content}">Content</p>
+    </div>
+  </main>
+
+</body>
+
+</html>

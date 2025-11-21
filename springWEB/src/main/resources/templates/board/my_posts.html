@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>My Posts</title>
+  <style>
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      margin: 20px
+    }
+
+    header nav a {
+      margin-right: 10px
+    }
+
+    .post {
+      border: 1px solid #ddd;
+      padding: 12px;
+      margin-bottom: 12px
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <nav>
+      <a th:href="@{/}">Home</a>
+      <a th:href="@{/posts/create}">Write</a>
+      <a th:href="@{/my-posts}">My Posts</a>
+      <span th:if="${#authentication?.name}"> | Logged in as <b th:text="${#authentication.name}"></b></span>
+      <span th:if="${#authentication == null}">
+        <a th:href="@{/login}">Login</a>
+      </span>
+      <form th:if="${#authentication != null}" th:action="@{/logout}" method="post" style="display:inline">
+        <button type="submit">Logout</button>
+      </form>
+    </nav>
+  </header>
+
+  <main>
+    <h1>My Posts</h1>
+
+    <div th:if="${posts.size()} == 0">You have not written any posts yet.</div>
+    <div th:each="post : ${posts}" class="post">
+      <h3 th:text="${post.title}">Title</h3>
+      <div><small>by <span th:text="${post.author}">me</span> - <span th:text="${post.createdAt}">date</span></small>
+      </div>
+      <p th:text="${post.content}">Content</p>
+    </div>
+  </main>
+
+</body>
+
+</html>
