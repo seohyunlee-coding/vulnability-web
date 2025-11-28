@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <title>ThoughtBoard</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    nav {
+      background: #f3f4f6;
+      padding: 12px 20px;
+    }
+
+    nav a {
+      margin-right: 12px;
+      text-decoration: none;
+      color: #1E3A8A;
+      font-weight: 600;
+    }
+
+    nav form {
+      display: inline;
+    }
+  </style>
+</head>
+
+<body>
+  <div th:fragment="layout">
+    <div th:replace="~{board/header :: header}"></div>
+
+    <!-- ensure content isn't hidden under the fixed header: add top padding equal to header height -->
+    <main style="padding-top:72px;"> <!-- a little extra spacing for comfortable layout -->
+      <div th:insert="~{::content}"></div>
+    </main>
+  </div>
+
+</body>
+
+</html>

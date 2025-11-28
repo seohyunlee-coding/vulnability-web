@@ -19,6 +19,7 @@ public class WebSecurityConfig {
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
     http
         .authorizeHttpRequests(authorize -> authorize
+            // Allow static resources, H2 console and auth pages; protect posts and my-posts
             .requestMatchers("/css/**", "/js/**", "/images/**", "/h2-console/**", "/login", "/signup").permitAll()
             .anyRequest().authenticated())
         .formLogin(form -> form
@@ -27,7 +28,7 @@ public class WebSecurityConfig {
         .logout(logout -> logout
             .logoutSuccessUrl("/login?logout"))
         .csrf(csrf -> csrf.ignoringRequestMatchers("/h2-console/**"))
-        .headers(headers -> headers.frameOptions().sameOrigin());
+        .headers(headers -> headers.frameOptions(frame -> frame.sameOrigin()));
 
     return http.build();
   }

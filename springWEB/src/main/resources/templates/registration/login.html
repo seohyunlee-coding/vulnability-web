@@ -1,34 +1,25 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<div xmlns:th="http://www.thymeleaf.org" th:fragment="content">
 
-<head>
-  <meta charset="UTF-8" />
-  <title>Login</title>
-  <style>
-    body {
-      font-family: Arial, Helvetica, sans-serif;
-      margin: 20px
-    }
-  </style>
-</head>
+    <main style="max-width:600px; margin:40px auto; padding:0 20px; font-family: 'Inter', sans-serif;">
+      <h1 style="font-size:2rem; color:#1E3A8A; margin-bottom:20px;">Login</h1>
+      <form th:action="@{/login}" method="post" style="display:flex; flex-direction:column; gap:12px;">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+        <div>
+          <label style="display:block; margin-bottom:6px; font-weight:600;">Username</label>
+          <input type="text" name="username"
+            style="width:100%; padding:10px; border-radius:8px; border:1px solid #e6eef8;" />
+        </div>
+        <div>
+          <label style="display:block; margin-bottom:6px; font-weight:600;">Password</label>
+          <input type="password" name="password"
+            style="width:100%; padding:10px; border-radius:8px; border:1px solid #e6eef8;" />
+        </div>
+        <div>
+          <button type="submit"
+            style="padding:10px 18px; background:#5DADE2; color:#fff; border:none; border-radius:8px; font-weight:700;">Login</button>
+        </div>
+      </form>
+      <p style="margin-top:12px;">Don't have an account? <a th:href="@{/signup}">Sign up</a></p>
+    </main>
 
-<body>
-  <h1>Login</h1>
-  <form th:action="@{/login}" method="post">
-    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-    <div>
-      <label>Username</label>
-      <input type="text" name="username" />
-    </div>
-    <div>
-      <label>Password</label>
-      <input type="password" name="password" />
-    </div>
-    <div>
-      <button type="submit">Login</button>
-    </div>
-  </form>
-  <p>Don't have an account? <a th:href="@{/signup}">Sign up</a></p>
-</body>
-
-</html>
+  </div>

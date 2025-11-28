@@ -1,55 +1,25 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<div xmlns:th="http://www.thymeleaf.org" th:fragment="content">
 
-<head>
-  <meta charset="UTF-8" />
-  <title>Create Post</title>
-  <style>
-    body {
-      font-family: Arial, Helvetica, sans-serif;
-      margin: 20px
-    }
+    <main style="max-width:900px; margin:40px auto; padding:0 20px; font-family: 'Inter', sans-serif;">
+      <h1 style="font-size:2rem; color:#1E3A8A; margin-bottom:20px;">Create Post</h1>
 
-    header nav a {
-      margin-right: 10px
-    }
-  </style>
-</head>
-
-<body>
-  <header>
-    <nav>
-      <a th:href="@{/}">Home</a>
-      <a th:href="@{/posts/create}">Write</a>
-      <a th:href="@{/my-posts}">My Posts</a>
-      <span th:if="${#authentication?.name}"> | Logged in as <b th:text="${#authentication.name}"></b></span>
-      <span th:if="${#authentication == null}">
-        <a th:href="@{/login}">Login</a>
-      </span>
-      <form th:if="${#authentication != null}" th:action="@{/logout}" method="post" style="display:inline">
-        <button type="submit">Logout</button>
+      <form th:action="@{/posts/create}" th:object="${post}" method="post" style="display:flex; flex-direction:column; gap:16px;">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+        <div>
+          <label style="display:block; font-weight:600; margin-bottom:8px;">Title</label>
+          <input type="text" th:field="*{title}"
+                 style="width:100%; padding:12px 14px; border-radius:8px; border:1px solid #d1e7f5;" />
+        </div>
+        <div>
+          <label style="display:block; font-weight:600; margin-bottom:8px;">Content</label>
+          <textarea th:field="*{content}" rows="8" cols="60"
+                    style="width:100%; padding:12px 14px; border-radius:8px; border:1px solid #d1e7f5;"></textarea>
+        </div>
+        <div>
+          <button type="submit"
+                  style="padding:12px 24px; background:#5DADE2; color:white; border:none; border-radius:10px; font-weight:700;">Submit</button>
+        </div>
       </form>
-    </nav>
-  </header>
+    </main>
 
-  <main>
-    <h1>Create Post</h1>
-
-    <form th:action="@{/posts/create}" th:object="${post}" method="post">
-      <div>
-        <label>Title</label>
-        <input type="text" th:field="*{title}" />
-      </div>
-      <div>
-        <label>Content</label>
-        <textarea th:field="*{content}" rows="8" cols="60"></textarea>
-      </div>
-      <div>
-        <button type="submit">Submit</button>
-      </div>
-    </form>
-  </main>
-
-</body>
-
-</html>
+  </div>

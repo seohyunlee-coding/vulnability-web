@@ -1,0 +1,23 @@
+<div xmlns:th="http://www.thymeleaf.org" th:fragment="header">
+  <nav style="position:fixed; top:0; left:0; right:0; height:64px; background:#f3f4f6; display:flex; align-items:center; justify-content:space-between; padding:0 14px; z-index:1000; box-shadow:0 2px 8px rgba(0,0,0,0.06);">
+    <div style="display:flex; gap:12px; align-items:center;">
+      <a th:href="@{/}" style="text-decoration:none; color:#1E3A8A; font-weight:700; font-size:1rem;">Home</a>
+      <a th:href="@{/posts/create}" style="text-decoration:none; color:#1E3A8A; font-weight:600; font-size:0.95rem;">Write</a>
+      <a th:if="${#authentication != null}" th:href="@{/my-posts}" style="text-decoration:none; color:#1E3A8A; font-weight:600; font-size:0.95rem;">My Posts</a>
+    </div>
+
+    <div style="display:flex; gap:12px; align-items:center;">
+      <span th:if="${#authentication != null}" style="display:flex; gap:8px; align-items:center;">
+        <span style="font-size:0.9rem; color:#1E3A8A;">Signed in as <b th:text="${#authentication.name}">user</b></span>
+        <form th:action="@{/logout}" method="post" style="display:inline; margin:0;">
+          <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+          <button type="submit" style="background:none; border:none; color:#1E3A8A; font-weight:700; cursor:pointer; padding:6px 8px;">Logout</button>
+        </form>
+      </span>
+
+      <span th:if="${#authentication == null}">
+        <a th:href="@{/login}" style="text-decoration:none; color:#1E3A8A; font-weight:700;">Login</a>
+      </span>
+    </div>
+  </nav>
+</div>

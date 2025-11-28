@@ -31,13 +31,20 @@ public class PostController {
   }
 
   @GetMapping("/posts/create")
-  public String createForm(Model model) {
+  public String createForm(@AuthenticationPrincipal UserDetails user, Model model) {
+    // if not authenticated, redirect to login (security normally handles this, but defensive here avoids NPE)
+    if (user == null) {
+      return "redirect:/login";
+    }
     model.addAttribute("post", new Post());
     return "board/create_post";
   }
 
   @PostMapping("/posts/create")
   public String createPost(@ModelAttribute Post post, @AuthenticationPrincipal UserDetails user) {
+    if (user == null) {
+      return "redirect:/login";
+    }
     post.setAuthor(user.getUsername());
     postService.save(post);
     return "redirect:/";
@@ -45,6 +52,9 @@ public class PostController {
 
   @GetMapping("/my-posts")
   public String myPosts(@AuthenticationPrincipal UserDetails user, Model model) {
+    if (user == null) {
+      return "redirect:/login";
+    }
     List<Post> posts = postService.findByAuthor(user.getUsername());
     model.addAttribute("posts", posts);
     return "board/my_posts";
